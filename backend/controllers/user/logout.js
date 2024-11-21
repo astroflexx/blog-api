@@ -1,4 +1,4 @@
-const { successResponse } = require("../utils/response");
+const { successResponse } = require("../../utils/response");
 
 const logout = (req, res) => {
   try {

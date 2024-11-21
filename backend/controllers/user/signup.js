@@ -1,6 +1,6 @@
-const { createUser, findUserByEmail } = require("../db/queries");
-const { hashPassword } = require("../utils/hashPassword");
-const { successResponse, errorResponse } = require("../utils/response");
+const { createUser, findUserByEmail } = require("../../db/queries");
+const { hashPassword } = require("../../utils/hashPassword");
+const { successResponse, errorResponse } = require("../../utils/response");
 
 const signup = async (req, res) => {
   try {

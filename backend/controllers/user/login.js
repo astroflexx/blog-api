@@ -1,7 +1,7 @@
-const { findUserByEmail } = require("../db/queries");
-const { comparePassword } = require("../utils/hashPassword");
-const { generateToken } = require("../utils/jwt");
-const { successResponse, errorResponse } = require("../utils/response");
+const { findUserByEmail } = require("../../db/queries");
+const { comparePassword } = require("../../utils/hashPassword");
+const { generateToken } = require("../../utils/jwt");
+const { successResponse, errorResponse } = require("../../utils/response");
 
 const login = async (req, res) => {
   try {
