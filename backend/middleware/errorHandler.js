@@ -1,10 +1,9 @@
+const { errorResponse } = require("../utils/response");
+
 const errorHandler = (err, req, res, next) => {
   console.error(err);
 
-  res.status(500).json({
-    status: "error",
-    message: "Something went wrong. Please try again later.",
-  });
+  errorResponse(res, "Something went wrong. Please try again later.", 500);
 };
 
 module.exports = errorHandler;
