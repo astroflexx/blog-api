@@ -6,7 +6,7 @@ const createPostController = async (req, res) => {
     const { title, content, published } = req.body;
     const { userId } = req.user;
 
-    const newPost = await createPost(title, content, published, userId);
+    const newPost = await createPost(title, content, parseInt(userId));
 
     successResponse(res, newPost, "Post created successfully");
   } catch (err) {

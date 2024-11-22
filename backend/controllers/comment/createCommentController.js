@@ -1,13 +1,13 @@
-const { createComment } = require("../db/queries");
-const { successResponse, errorResponse } = require("../utils/response");
+const { createComment } = require("../../db/queries");
+const { successResponse, errorResponse } = require("../../utils/response");
 
-const create = async (req, res) => {
+const createCommentController = async (req, res) => {
   try {
     const { postId } = req.params;
     const { content } = req.body;
     const { userId } = req.user;
 
-    const newComment = await createComment(content, postId, userId);
+    const newComment = await createComment(content, parseInt(postId), parseInt(userId));
 
     successResponse(res, newComment, "Comment created successfully");
   } catch (err) {
@@ -16,4 +16,4 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = create;
+module.exports = createCommentController;

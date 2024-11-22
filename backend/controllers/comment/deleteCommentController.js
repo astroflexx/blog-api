@@ -1,18 +1,18 @@
-const { getCommentById, deleteCommentById } = require("../db/queries");
-const { successResponse, errorResponse } = require("../utils/response");
+const { getCommentById, deleteComment } = require("../../db/queries");
+const { successResponse, errorResponse } = require("../../utils/response");
 
 const deleteCommentController = async (req, res) => {
   try {
-    const { postId, commentId } = req.params;
+    const { commentId } = req.params;
     const { userId } = req.user;
 
-    const comment = await getCommentById(commentId);
+    const comment = await getCommentById(parseInt(commentId));
 
     if (!comment) {
       return errorResponse(res, "Comment not found", 404);
     }
 
-    if (comment.author_id !== userId) {
+    if (comment.author_id !== parseInt(userId)) {
       return errorResponse(
         res,
         "You do not have permission to delete this comment",
@@ -20,11 +20,10 @@ const deleteCommentController = async (req, res) => {
       );
     }
 
-    await deleteCommentById(commentId);
+    await deleteComment(parseInt(commentId));
 
     successResponse(res, null, "Comment deleted successfully");
   } catch (err) {
-    console.error(err);
     errorResponse(res, "Failed to delete comment", 500);
   }
 };

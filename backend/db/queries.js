@@ -1,4 +1,5 @@
-const prisma = require("@prisma/client");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 const createUser = async (email, password) => {
   return prisma.user.create({
@@ -21,12 +22,15 @@ const findUserById = async (id) => {
   });
 };
 
-const getAllPosts = async (limit, offset) => {
+const getAllPosts = async () => {
   return prisma.post.findMany({
-    take: limit,
-    skip: offset,
     include: {
-      author: true,
+      author: {
+        select: {
+          id: true,
+          email: true,
+        },
+      },
       comments: true,
     },
   });
@@ -36,7 +40,12 @@ const getPostById = async (postId) => {
   return prisma.post.findUnique({
     where: { id: postId },
     include: {
-      author: true,
+      author: {
+        select: {
+          id: true,
+          email: true,
+        },
+      },
       comments: true,
     },
   });
@@ -52,13 +61,23 @@ const createPost = async (title, content, authorId) => {
   });
 };
 
-const updatePost = async (postId, title, content) => {
+const updatePost = async (postId, title, content, published) => {
   return prisma.post.update({
     where: { id: postId },
     data: {
       title,
       content,
+      published,
       updated_at: new Date(),
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          email: true,
+        },
+      },
+      comments: true,
     },
   });
 };
@@ -79,10 +98,9 @@ const createComment = async (content, postId, authorId) => {
   });
 };
 
-const getCommentsByPostId = async (postId) => {
-  return prisma.comment.findMany({
-    where: { post_id: postId },
-    include: { author: true },
+const getCommentById = async (commentId) => {
+  return prisma.comment.findUnique({
+    where: { id: commentId },
   });
 };
 
@@ -90,9 +108,16 @@ const updateComment = async (commentId, content) => {
   return prisma.comment.update({
     where: { id: commentId },
     data: {
-      content,
-      updated_at: new Date(),
+      content
     },
+    include: {
+      author: {
+        select: {
+          id: true,
+          email: true,
+        }
+      }
+    }
   });
 };
 
@@ -112,7 +137,7 @@ module.exports = {
   updatePost,
   deletePost,
   createComment,
-  getCommentsByPostId,
+  getCommentById, 
   updateComment,
   deleteComment,
 };

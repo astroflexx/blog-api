@@ -1,19 +1,19 @@
-const { getCommentById, updateCommentById } = require("../db/queries");
-const { successResponse, errorResponse } = require("../utils/response");
+const { getCommentById, updateComment } = require("../../db/queries");
+const { successResponse, errorResponse } = require("../../utils/response");
 
 const updateCommentController = async (req, res) => {
   try {
-    const { postId, commentId } = req.params;
+    const { commentId } = req.params;
     const { content } = req.body;
     const { userId } = req.user;
 
-    const comment = await getCommentById(commentId);
+    const comment = await getCommentById(parseInt(commentId));
 
     if (!comment) {
       return errorResponse(res, "Comment not found", 404);
     }
 
-    if (comment.author_id !== userId) {
+    if (comment.author_id !== parseInt(userId)) {
       return errorResponse(
         res,
         "You do not have permission to edit this comment",
@@ -21,7 +21,7 @@ const updateCommentController = async (req, res) => {
       );
     }
 
-    const updatedComment = await updateCommentById(commentId, content);
+    const updatedComment = await updateComment(parseInt(commentId), content);
 
     successResponse(res, updatedComment, "Comment updated successfully");
   } catch (err) {

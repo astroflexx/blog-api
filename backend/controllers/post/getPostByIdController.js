@@ -4,7 +4,7 @@ const { successResponse, errorResponse } = require("../../utils/response");
 const getPostByIdController = async (req, res) => {
   try {
     const { postId } = req.params;
-    const post = await getPostById(postId);
+    const post = await getPostById(parseInt(postId));
 
     if (!post) {
       return errorResponse(res, "Post not found", 404);
