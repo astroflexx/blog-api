@@ -1,6 +1,14 @@
 const { body, validationResult } = require("express-validator");
 const { errorResponse } = require("../utils/response");
 
+const handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return errorResponse(res, errors.array(), 400);
+  }
+  next();
+};
+
 const validatePost = [
   body("title")
     .isString()
@@ -18,13 +26,7 @@ const validatePost = [
     .optional()
     .isBoolean()
     .withMessage("Published must be a boolean value."),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return errorResponse(res, errors.array(), 400);
-    }
-    next();
-  },
+  handleValidationErrors,
 ];
 
 const validateComment = [
@@ -34,13 +36,7 @@ const validateComment = [
     .notEmpty()
     .withMessage("Content is required.")
     .trim(),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return errorResponse(res, errors.array(), 400);
-    }
-    next();
-  },
+  handleValidationErrors,
 ];
 
 const validateUserSignup = [
@@ -65,13 +61,17 @@ const validateUserSignup = [
     .withMessage(
       "Password must contain at least one special character (e.g. !, @, #)."
     ),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return errorResponse(res, errors.array(), 400);
-    }
-    next();
-  },
+  body("username")
+    .isString()
+    .withMessage("Username must be a string.")
+    .notEmpty()
+    .withMessage("Username is required.")
+    .isLength({ min: 3, max: 20 })
+    .withMessage("Username must be between 3 and 20 characters.")
+    .matches(/^[a-zA-Z0-9_]+$/)
+    .withMessage("Username can only contain letters, numbers, and underscores.")
+    .trim(),
+  handleValidationErrors,
 ];
 
 module.exports = { validatePost, validateComment, validateUserSignup };

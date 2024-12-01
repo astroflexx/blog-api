@@ -21,7 +21,10 @@ const login = async (req, res) => {
 
     const { password: _, ...userData } = user;
 
-    const token = generateToken({ userId: userData.id });
+    const token = generateToken({
+      userId: userData.id,
+      username: userData.username,
+    });
 
     successResponse(res, { ...userData, token }, "Login successful");
   } catch (err) {

@@ -11,7 +11,6 @@ const createCommentController = async (req, res) => {
 
     successResponse(res, newComment, "Comment created successfully");
   } catch (err) {
-    console.error(err);
     errorResponse(res, "Failed to create comment", 500);
   }
 };

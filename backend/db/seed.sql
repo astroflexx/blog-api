@@ -1,7 +1,7 @@
-INSERT INTO "User" (email, password) VALUES
-('alice@example.com', 'password123'),
-('bob@example.com', 'password456'),
-('charlie@example.com', 'password789');
+INSERT INTO "User" (email, password, username) VALUES
+('alice@example.com', 'password123', 'alice123'),
+('bob@example.com', 'password456', 'bobster'),
+('charlie@example.com', 'password789', 'charliec');
 
 INSERT INTO "Post" (title, content, published, created_at, updated_at, author_id) VALUES
 ('Welcome to My Blog', 'This is the first post on my blog.', true, now(), now(), 1),

@@ -1,4 +1,4 @@
-const { getPostById, deletePostById } = require("../../db/queries");
+const { getPostById, deletePost } = require("../../db/queries");
 const { successResponse, errorResponse } = require("../../utils/response");
 
 const deletePostController = async (req, res) => {
@@ -6,13 +6,13 @@ const deletePostController = async (req, res) => {
     const { postId } = req.params;
     const { userId } = req.user;
 
-    const post = await getPostById(postId);
+    const post = await getPostById(parseInt(postId));
 
     if (!post) {
       return errorResponse(res, "Post not found", 404);
     }
 
-    if (post.author_id !== userId) {
+    if (post.author_id !== parseInt(userId)) {
       return errorResponse(
         res,
         "You do not have permission to delete this post",
@@ -20,10 +20,11 @@ const deletePostController = async (req, res) => {
       );
     }
 
-    await deletePostById(postId);
+    await deletePost(parseInt(postId));
 
     successResponse(res, null, "Post deleted successfully");
   } catch (err) {
+    console.log(err);
     errorResponse(res, "Failed to delete post", 500);
   }
 };

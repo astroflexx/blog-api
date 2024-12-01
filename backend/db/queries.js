@@ -1,11 +1,12 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-const createUser = async (email, password) => {
+const createUser = async (email, password, username) => {
   return prisma.user.create({
     data: {
       email,
       password,
+      username,
     },
   });
 };
@@ -13,12 +14,27 @@ const createUser = async (email, password) => {
 const findUserByEmail = async (email) => {
   return prisma.user.findUnique({
     where: { email },
+    select: {
+      id: true,
+      username: true,
+      password: true,
+    },
+  });
+};
+
+const findUserByUsername = async (username) => {
+  return prisma.user.findUnique({
+    where: { username },
   });
 };
 
 const findUserById = async (id) => {
   return prisma.user.findUnique({
     where: { id },
+    select: {
+      id: true,
+      username: true,
+    },
   });
 };
 
@@ -28,7 +44,7 @@ const getAllPosts = async () => {
       author: {
         select: {
           id: true,
-          email: true,
+          username: true,
         },
       },
       comments: true,
@@ -43,19 +59,29 @@ const getPostById = async (postId) => {
       author: {
         select: {
           id: true,
-          email: true,
+          username: true,
         },
       },
-      comments: true,
+      comments: {
+        include: {
+          author: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
+      },
     },
   });
 };
 
-const createPost = async (title, content, authorId) => {
+const createPost = async (title, content, published, authorId) => {
   return prisma.post.create({
     data: {
       title,
       content,
+      published,
       author_id: authorId,
     },
   });
@@ -74,10 +100,19 @@ const updatePost = async (postId, title, content, published) => {
       author: {
         select: {
           id: true,
-          email: true,
+          username: true,
         },
       },
-      comments: true,
+      comments: {
+        include: {
+          author: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
+      },
     },
   });
 };
@@ -101,6 +136,14 @@ const createComment = async (content, postId, authorId) => {
 const getCommentById = async (commentId) => {
   return prisma.comment.findUnique({
     where: { id: commentId },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true,
+        },
+      },
+    },
   });
 };
 
@@ -108,16 +151,16 @@ const updateComment = async (commentId, content) => {
   return prisma.comment.update({
     where: { id: commentId },
     data: {
-      content
+      content,
     },
     include: {
       author: {
         select: {
           id: true,
-          email: true,
-        }
-      }
-    }
+          username: true,
+        },
+      },
+    },
   });
 };
 
@@ -130,6 +173,7 @@ const deleteComment = async (commentId) => {
 module.exports = {
   createUser,
   findUserByEmail,
+  findUserByUsername,
   findUserById,
   getAllPosts,
   getPostById,
@@ -137,7 +181,7 @@ module.exports = {
   updatePost,
   deletePost,
   createComment,
-  getCommentById, 
+  getCommentById,
   updateComment,
   deleteComment,
 };
