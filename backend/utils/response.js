@@ -1,5 +1,5 @@
-const successResponse = (res, data, message = "Request was successful") => {
-  res.status(200).json({
+const successResponse = (res, data, message = "Request was successful", statusCode = 200) => {
+  res.status(statusCode).json({
     status: "success",
     message,
     data,

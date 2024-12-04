@@ -12,12 +12,12 @@ const signup = async (req, res) => {
 
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
-      return errorResponse(res, "User with this email already exists", 400);
+      return errorResponse(res, ["User with this email already exists"], 400);
     }
 
     const existingUsernameUser = await findUserByUsername(username);
     if (existingUsernameUser) {
-      return errorResponse(res, "Username is already taken", 400);
+      return errorResponse(res, ["Username is already taken"], 400);
     }
 
     const hashedPassword = await hashPassword(password);
@@ -25,9 +25,9 @@ const signup = async (req, res) => {
     const newUser = await createUser(email, hashedPassword, username);
 
     const { password: _, ...userData } = newUser;
-    successResponse(res, userData, "User created successfully", 201);
+    successResponse(res, userData, ["User created successfully"], 201);
   } catch (err) {
-    errorResponse(res, "Failed to create user", 500);
+    errorResponse(res, ["Failed to create user"], 500);
   }
 };
 

@@ -5,6 +5,7 @@ const errorHandler = require("./middleware/errorHandler");
 const userRoutes = require("./routes/userRoutes");
 const postRoutes = require("./routes/postRoutes");
 const commentRoutes = require("./routes/commentRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(userRoutes);
 app.use(postRoutes);
 app.use(commentRoutes);
+app.use(authRoutes);
 
 app.use(errorHandler);
 
