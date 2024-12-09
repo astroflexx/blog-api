@@ -5,7 +5,7 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const Login = ({ isLoggedIn, setIsLoggedIn }) => {
+const Login = ({ isLoggedIn, setIsLoggedIn, setUsername }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -94,6 +94,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn }) => {
       if (response.status === 200) {
         localStorage.setItem("token", response.data.data.token);
         setIsLoggedIn(true);
+        setUsername(response.data.data.username);
         navigate("/", { replace: true });
       }
     } catch (error) {
@@ -186,6 +187,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn }) => {
 Login.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   setIsLoggedIn: PropTypes.func.isRequired,
+  setUsername: PropTypes.func.isRequired,
 };
 
 export default Login;

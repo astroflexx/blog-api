@@ -11,6 +11,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -23,6 +24,7 @@ function App() {
           });
 
           if (response.status === 200) {
+            setUsername(response.data.message.user.username);
             setIsLoggedIn(true);
           }
         } catch (error) {
@@ -49,17 +51,17 @@ function App() {
     <Router>
       <div className="container mt-4">
         <Routes>
-          <Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
+          <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} username={username} />} />
           <Route
             path="/login"
             element={
-              <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+              <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setUsername={setUsername} />
             }
           />
           <Route path="/signup" element={<Signup isLoggedIn={isLoggedIn} />} />
           <Route
-            path="/post/:postId"
-            element={<PostDetail isLoggedIn={isLoggedIn} />}
+            path="/posts/:postId"
+            element={<PostDetail isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} username={username} />}
           />
         </Routes>
       </div>
