@@ -42,6 +42,10 @@ const PostDetail = ({ isLoggedIn, setIsLoggedIn, username }) => {
     navigate("/login");
   };
 
+  const handleBackToHome = () => {
+    navigate("/");
+  };
+
   const handleAddComment = async (newComment) => {
     try {
       const token = localStorage.getItem("token");
@@ -161,6 +165,12 @@ const PostDetail = ({ isLoggedIn, setIsLoggedIn, username }) => {
           {isLoggedIn && <CommentForm onAddComment={handleAddComment} />}
         </>
       )}
+
+      <div className="mt-4">
+        <button className="btn btn-primary" onClick={handleBackToHome}>
+          Back to Home
+        </button>
+      </div>
     </div>
   );
 };
