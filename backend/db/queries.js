@@ -38,8 +38,28 @@ const findUserById = async (id) => {
   });
 };
 
-const getAllPosts = async () => {
+const getAllPublishedPosts = async () => {
   return prisma.post.findMany({
+    where: {
+      published: true,
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true,
+        },
+      },
+      comments: true,
+    },
+  });
+};
+
+const getPostsByUserId = async (userId) => {
+  return prisma.post.findMany({
+    where: {
+      author_id: userId,
+    },
     include: {
       author: {
         select: {
@@ -130,6 +150,14 @@ const createComment = async (content, postId, authorId) => {
       post_id: postId,
       author_id: authorId,
     },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true,
+        }
+      }
+    }
   });
 };
 
@@ -175,7 +203,8 @@ module.exports = {
   findUserByEmail,
   findUserByUsername,
   findUserById,
-  getAllPosts,
+  getAllPublishedPosts,
+  getPostsByUserId,
   getPostById,
   createPost,
   updatePost,
