@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Post from "../components/Post";
 import CommentList from "../components/CommentList";
 import CommentForm from "../components/CommentForm";
@@ -147,7 +148,7 @@ const PostDetail = ({ isLoggedIn, setIsLoggedIn, username }) => {
       ) : (
         <div className="d-flex justify-content-between">
           <p>
-            <a href="/signup">Sign Up</a> | <a href="/login">Login</a>
+            <Link to="/signup">Sign Up</Link> | <Link to="/login">Login</Link>
           </p>
         </div>
       )}
